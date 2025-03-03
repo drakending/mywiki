@@ -12,6 +12,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const unacquiredToggleBtn = document.getElementById('toggle-unacquired');
     const unacquiredList = document.getElementById('unacquired-list');
     const unacquiredTbody = document.getElementById('unacquired-tbody');
+    
+    // Sorting state
+    let unacquiredFigures = [];
+    let currentSortField = 'actual_price';
+    let currentSortDirection = 'desc';
 
     // Fetch and process figures data
     async function loadFigureStats() {
@@ -58,7 +63,8 @@ document.addEventListener('DOMContentLoaded', function() {
             processYearlyStats(figures);
 
             // Process unacquired figures
-            processUnacquiredFigures(figures);
+            unacquiredFigures = figures.filter(f => f.status !== 'purchased' && f.status !== 'preordered');
+            processUnacquiredFigures();
 
         } catch (error) {
             console.error('Error loading figure stats:', error);
@@ -139,19 +145,75 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    function processUnacquiredFigures(figures) {
-        // Filter out figures not purchased
-        const unacquiredFigures = figures.filter(f => f.status !== 'purchased');
+    function sortUnacquiredFigures(field = currentSortField) {
+        // If clicking the same header, reverse the sort direction
+        if (field === currentSortField) {
+            currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            currentSortField = field;
+            // Default to descending for price, ascending for name and date
+            currentSortDirection = field === 'actual_price' ? 'desc' : 'asc';
+        }
 
-        // Toggle unacquired figures list
-        unacquiredToggleBtn.addEventListener('click', function() {
-            unacquiredList.classList.toggle('hidden');
-            const icon = this.querySelector('i');
-            icon.classList.toggle('fa-chevron-down');
-            icon.classList.toggle('fa-chevron-up');
+        unacquiredFigures.sort((a, b) => {
+            let valueA, valueB;
+            
+            if (field === 'actual_price') {
+                valueA = a.actual_price || 0;
+                valueB = b.actual_price || 0;
+            } else if (field === '名称') {
+                valueA = a['名称'] || '';
+                valueB = b['名称'] || '';
+                return currentSortDirection === 'asc' 
+                    ? valueA.localeCompare(valueB) 
+                    : valueB.localeCompare(valueA);
+            } else if (field === '发售日') {
+                valueA = a['发售日'] || '';
+                valueB = b['发售日'] || '';
+                return currentSortDirection === 'asc' 
+                    ? valueA.localeCompare(valueB) 
+                    : valueB.localeCompare(valueA);
+            }
+            
+            return currentSortDirection === 'asc' ? valueA - valueB : valueB - valueA;
         });
 
-        // Populate unacquired figures table
+        // Update UI to show sorting state
+        renderUnacquiredFigures();
+        updateSortingIndicators();
+    }
+
+    function updateSortingIndicators() {
+        // Remove all sorting indicators
+        document.querySelectorAll('#unacquired-table th').forEach(th => {
+            th.classList.remove('sort-asc', 'sort-desc');
+            const icon = th.querySelector('.sort-icon');
+            if (icon) {
+                icon.remove();
+            }
+        });
+
+        // Add sorting indicator to current column
+        const columnIndex = {
+            '名称': 0,
+            'actual_price': 1,
+            '发售日': 2
+        }[currentSortField];
+
+        if (columnIndex !== undefined) {
+            const th = document.querySelector(`#unacquired-table th:nth-child(${columnIndex + 1})`);
+            if (th) {
+                th.classList.add(`sort-${currentSortDirection}`);
+                
+                const icon = document.createElement('span');
+                icon.className = 'sort-icon';
+                icon.innerHTML = currentSortDirection === 'asc' ? ' ↑' : ' ↓';
+                th.appendChild(icon);
+            }
+        }
+    }
+
+    function renderUnacquiredFigures() {
         unacquiredTbody.innerHTML = unacquiredFigures.map(figure => `
             <tr>
                 <td>${figure['名称'] || '未知'}</td>
@@ -159,6 +221,50 @@ document.addEventListener('DOMContentLoaded', function() {
                 <td>${figure['发售日'] || '--'}</td>
             </tr>
         `).join('');
+    }
+
+    function processUnacquiredFigures() {
+        // Initialize the table with headers including sorting functionality
+        const unacquiredTable = document.getElementById('unacquired-table');
+        
+        // Clear and repopulate the thead with click handlers
+        const thead = unacquiredTable.querySelector('thead');
+        thead.innerHTML = `
+            <tr>
+                <th data-sort="名称">名称</th>
+                <th data-sort="actual_price">咸鱼现价</th>
+                <th data-sort="发售日">发售日期</th>
+            </tr>
+        `;
+        
+        // Add sorting functionality to headers
+        thead.querySelectorAll('th').forEach(th => {
+            th.style.cursor = 'pointer';
+            th.addEventListener('click', function() {
+                const field = this.getAttribute('data-sort');
+                sortUnacquiredFigures(field);
+            });
+        });
+
+        // Toggle unacquired figures list
+        unacquiredToggleBtn.addEventListener('click', function() {
+            unacquiredList.classList.toggle('hidden');
+            const icon = this.querySelector('i');
+            const buttonText = this.textContent.trim().replace(/^[▼▲]\s*/, '');
+            
+            if (unacquiredList.classList.contains('hidden')) {
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+                this.innerHTML = `<i class="fas fa-chevron-down"></i> 展开`;
+            } else {
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+                this.innerHTML = `<i class="fas fa-chevron-up"></i> 收起`;
+            }
+        });
+
+        // Initial sort (by default, price descending)
+        sortUnacquiredFigures('actual_price');
     }
 
     // Load stats on page load

@@ -122,3 +122,32 @@
         grid-template-columns: 1fr;
     }
 }
+
+#unacquired-table th {
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+}
+
+#unacquired-table th:hover {
+    background-color: #f5f5f5;
+}
+
+.sort-icon {
+    margin-left: 5px;
+    display: inline-block;
+}
+
+.sort-asc, .sort-desc {
+    background-color: #f0f0f0;
+}
+
+/* Make the cursor a pointer on the table headers */
+#unacquired-table th {
+    cursor: pointer;
+}
+
+/* Add transition for hover effect */
+#unacquired-table th {
+    transition: background-color 0.2s;
+}
