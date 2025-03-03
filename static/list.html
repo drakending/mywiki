@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手办收藏列表 - Hpoi 手办信息抓取器</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/list.css">
+    <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Hpoi 手办信息抓取器</a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link"><i class="fas fa-search"></i> 抓取</a></li>
+                <li class="nav-item"><a href="list.html" class="nav-link active"><i class="fas fa-list"></i> 列表</a></li>
+                <li class="nav-item"><a href="stats.html" class="nav-link"><i class="fas fa-chart-pie"></i> 统计</a></li>
+
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header>
+            <h1>手办收藏列表</h1>
+            <p>管理您的手办收藏</p>
+        </header>
+
+        <div class="list-controls">
+            <div class="filter-controls">
+                <button class="filter-btn active" data-filter="all">全部</button>
+                <button class="filter-btn" data-filter="tracking">追踪中</button>
+                <button class="filter-btn" data-filter="preordered">已预订</button>
+                <button class="filter-btn" data-filter="purchased">已购入</button>
+                <span class="filter-count">共 <span id="filter-count-number">0</span> 条记录</span>
+            </div>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="搜索手办名称、制作商、系列...">
+                <button id="search-btn"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+
+        <div class="loading-indicator" id="loading">
+            <div class="spinner"></div>
+            <p>加载中...</p>
+        </div>
+
+        <table class="figures-table" id="figures-table">
+            <thead>
+                <tr>
+                    <th>名称</th>
+                    <th>制作商</th>
+                    <th>角色</th>
+                    <th>系列</th>
+                    <th>发售日</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="figures-list">
+                <!-- Table rows will be populated by JavaScript -->
+            </tbody>
+        </table>
+
+        <div class="no-data-message" id="no-data-message">
+            <i class="fas fa-box-open"></i>
+            <p>暂无记录</p>
+            <a href="index.html" class="btn-primary">开始抓取</a>
+        </div>
+
+        <div class="error-message" id="error-message">
+            <i class="fas fa-exclamation-circle"></i>
+            <p id="error-text">错误信息会显示在这里</p>
+        </div>
+    </div>
+
+    <!-- Modal for figure details -->
+    <div class="modal" id="figure-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-figure-title">手办详情</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="modal-figure-content">
+                    <div class="modal-figure-image">
+                        <img id="modal-figure-image" src="" alt="手办图片">
+                    </div>
+                    <div class="modal-figure-info">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th>定价</th>
+                                    <td id="modal-figure-price">--</td>
+                                </tr>
+                                <tr>
+                                    <th>发售日</th>
+                                    <td id="modal-figure-release-date">--</td>
+                                </tr>
+                                <tr>
+                                    <th>发售年份</th>
+                                    <td id="modal-figure-release-year">--</td>
+                                <tr>
+                                    <th>比例</th>
+                                    <td id="modal-figure-scale">--</td>
+                                </tr>
+                                <tr>
+                                    <th>制作</th>
+                                    <td id="modal-figure-manufacturer">--</td>
+                                </tr>
+                                <tr>
+                                    <th>角色</th>
+                                    <td id="modal-figure-character">--</td>
+                                </tr>
+                                <tr>
+                                    <th>作品</th>
+                                    <td id="modal-figure-series">--</td>
+                                </tr>
+                                <tr>
+                                    <th>尺寸</th>
+                                    <td id="modal-figure-dimensions">--</td>
+                                </tr>
+                                <tr>
+                                    <th>源链接</th>
+                                    <td><a id="modal-figure-url" href="#" target="_blank">--</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Status update form -->
+                <div class="figure-status-box">
+                    <h3>收藏状态</h3>
+                    <div class="status-controls">
+                        <div class="status-selector">
+                            <label>
+                                <input type="radio" name="modal-figure-status" value="tracking" checked> 追踪中
+                            </label>
+                            <label>
+                                <input type="radio" name="modal-figure-status" value="preordered"> 已预订
+                            </label>
+                            <label>
+                                <input type="radio" name="modal-figure-status" value="purchased"> 已购入
+                            </label>
+                        </div>
+                        
+                        <div class="price-input">
+                            <label>
+                                <span id="modal-price-label">咸鱼现价 (元)</span>
+                                <input type="number" id="modal-actual-price" min="0" step="0.01" placeholder="输入价格">
+                            </label>
+                        </div>
+                        
+                        <div class="remaining-payment-input" id="modal-remaining-payment-container" style="display: none;">
+                            <label>
+                                <span>待付尾款 (元)</span>
+                                <input type="number" id="modal-remaining-payment" min="0" step="0.01" placeholder="输入待付尾款">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="modal-update-btn" class="btn-primary">保存状态</button>
+                <button id="modal-close-btn" class="btn-secondary">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 Hpoi 手办信息抓取器 - 仅供学习和个人使用</p>
+    </footer>
+
+    <script src="js/utils.js"></script>
+    <script src="js/list.js"></script>
+</body>
+</html>

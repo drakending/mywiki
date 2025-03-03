@@ -1,0 +1,203 @@
+/* List Page Specific Styles */
+
+.list-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    font-size: 16px; /* Increased base font size */
+}
+
+.filter-controls {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.search-container {
+    display: flex;
+    min-width: 400px; /* Increased search container width */
+}
+
+#search-input {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px 0 0 4px;
+    outline: none;
+    flex: 1;
+    font-size: 16px; /* Increased input font size */
+}
+
+#search-btn {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    font-size: 16px; /* Increased button font size */
+}
+
+.figures-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    font-size: 16px; /* Increased table font size */
+}
+
+.figures-table thead {
+    background-color: #f1f1f1;
+}
+
+.figures-table th,
+.figures-table td {
+    padding: 15px; /* Increased padding for better spacing */
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.figures-table th {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.figures-table tbody tr {
+    transition: background-color 0.3s;
+    cursor: pointer;
+}
+
+.figures-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.figures-table td .badge {
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.badge-tracking {
+    background-color: #3498db;
+    color: white;
+}
+
+.badge-purchased {
+    background-color: #27ae60;
+    color: white;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.btn-details {
+    padding: 5px 10px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.btn-edit {
+    padding: 5px 10px;
+    background-color: #f39c12;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.no-data-message {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    display: flex; /* Changed to flex */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px; /* Added minimum height to prevent shrinking */
+}
+
+.no-data-message i {
+    font-size: 4rem;
+    color: #7f8c8d;
+    margin-bottom: 20px;
+}
+
+.no-data-message p {
+    font-size: 1.5rem;
+    color: #7f8c8d;
+    margin-bottom: 20px;
+}
+
+.no-data-message .btn-primary {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 1rem;
+}
+
+/* Truncate long text in cells */
+.truncate {
+    max-width: 200px; /* Slightly increased max-width */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+    .figures-table {
+        display: block;
+        overflow-x: auto;
+    }
+    
+    .list-controls {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .filter-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .search-container {
+        width: 100%;
+        min-width: 100%; /* Full width on smaller screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .filter-count {
+        width: 100%;
+        margin-top: 10px;
+        text-align: center;
+    }
+    
+    .list-controls {
+        font-size: 14px; /* Slightly smaller font on very small screens */
+    }
+    
+    #search-input, #search-btn {
+        font-size: 14px; /* Adjusted font size for small screens */
+    }
+}

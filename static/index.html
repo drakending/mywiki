@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hpoi 手办信息抓取器</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">Hpoi 手办信息抓取器</a>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link active"><i class="fas fa-search"></i> 抓取</a></li>
+                <li class="nav-item"><a href="list.html" class="nav-link"><i class="fas fa-list"></i> 列表</a></li>
+                <li class="nav-item"><a href="stats.html" class="nav-link"><i class="fas fa-chart-pie"></i> 统计</a></li>
+
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header>
+            <h1>Hpoi 手办信息抓取</h1>
+            <p>输入 Hpoi 网站上的手办链接，获取基本信息和图片</p>
+        </header>
+
+        <div class="url-form">
+            <input type="text" id="url-input" placeholder="输入 Hpoi 手办链接，如: https://www.hpoi.net/hobby/70515">
+            <button id="scrape-btn"><i class="fas fa-search"></i> 获取数据</button>
+        </div>
+
+        <div class="loading-indicator" id="loading">
+            <div class="spinner"></div>
+            <p>正在抓取数据，请稍候...</p>
+        </div>
+
+        <div class="figure-data" id="figure-data">
+            <div class="figure-header">
+                <h2 id="figure-title">手办名称</h2>
+                <div class="figure-actions">
+                    <button id="save-json-btn"><i class="fas fa-download"></i> 下载 JSON</button>
+                </div>
+            </div>
+            
+            <div class="figure-content">
+                <div class="figure-image">
+                    <img id="figure-image" src="" alt="手办图片">
+                </div>
+                
+                <div class="figure-info">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th>定价</th>
+                                <td id="figure-price">--</td>
+                            </tr>
+                            <tr>
+                                <th>发售日</th>
+                                <td id="figure-release-date">--</td>
+                            </tr>
+                            <tr>
+                                <th>发售年份</th>
+                                <td id="figure-release-year">--</td>
+                            </tr>
+                            <tr>
+                                <th>比例</th>
+                                <td id="figure-scale">--</td>
+                            </tr>
+                            <tr>
+                                <th>制作</th>
+                                <td id="figure-manufacturer">--</td>
+                            </tr>
+                            <tr>
+                                <th>角色</th>
+                                <td id="figure-character">--</td>
+                            </tr>
+                            <tr>
+                                <th>作品</th>
+                                <td id="figure-series">--</td>
+                            </tr>
+                            <tr>
+                                <th>尺寸</th>
+                                <td id="figure-dimensions">--</td>
+                            </tr>
+                            <tr>
+                                <th>源链接</th>
+                                <td><a id="figure-url" href="#" target="_blank">--</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- 添加收藏状态和价格输入 -->
+                    <div class="figure-status-box">
+                        <h3>收藏状态</h3>
+                        <div class="status-controls">
+                            <div class="status-selector">
+                                <label>
+                                    <input type="radio" name="figure-status" value="tracking" checked> 追踪中
+                                </label>
+                                <label>
+                                    <input type="radio" name="figure-status" value="preordered"> 已预订
+                                </label>
+                                <label>
+                                    <input type="radio" name="figure-status" value="purchased"> 已购入
+                                </label>
+                            </div>
+                            
+                            <div class="price-input">
+                                <label>
+                                    <span id="price-label">咸鱼现价 (元)</span>
+                                    <input type="number" id="actual-price" min="0" step="0.01" placeholder="输入价格">
+                                </label>
+                            </div>
+                            
+                            <div class="remaining-payment-input" id="remaining-payment-container" style="display: none;">
+                                <label>
+                                    <span>待付尾款 (元)</span>
+                                    <input type="number" id="remaining-payment" min="0" step="0.01" placeholder="输入待付尾款">
+                                </label>
+                            </div>
+                            
+                            <button id="update-status-btn" class="btn-primary">保存状态</button>
+                            <button id="save-to-db-btn" class="btn-success">确认并保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="error-message" id="error-message">
+            <i class="fas fa-exclamation-circle"></i>
+            <p id="error-text">错误信息会显示在这里</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 Hpoi 手办信息抓取器 - 仅供学习和个人使用</p>
+    </footer>
+
+    <script src="js/utils.js"></script>
+    <script src="js/scraper.js"></script>
+</body>
+</html>
