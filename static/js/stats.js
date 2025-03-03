@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 .reduce((sum, f) => sum + (f.remaining_payment || 0), 0);
             
             const marketValue = figures
-                .filter(f => f.status !== 'purchased')
+                .filter(f => f.status !== 'purchased' && f.status !== 'preordered')
                 .reduce((sum, f) => sum + (f.actual_price || 0), 0);
 
             // Update overall stats
