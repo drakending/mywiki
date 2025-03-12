@@ -292,7 +292,8 @@ def update_figure(uuid):
             'actual_price': 'actual_price',
             'remaining_payment': 'remaining_payment',
             '发售年份': 'release_year',
-            '角色': 'character'
+            '角色': 'character',
+            '发售日': 'release_date'  # 新增支持更新发售日期
         }
         
         # 更新支持的字段
@@ -309,6 +310,12 @@ def update_figure(uuid):
                 
                 # 使用 setattr 动态设置属性
                 setattr(figure, model_attr, value)
+                
+                # 如果更新了发售日期，同时更新发售年份
+                if input_key == '发售日':
+                    year_match = re.search(r'(\d{4})年', value)
+                    if year_match:
+                        setattr(figure, 'release_year', year_match.group(1))
         
         db.session.commit()
         
@@ -320,13 +327,6 @@ def update_figure(uuid):
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': '更新失败：' + str(e)}), 500
-    
-    except ValueError as e:
-        db.session.rollback()
-        return jsonify({'error': str(e)}), 400
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({'error': 'Update failed'}), 500
 
 
 # Route to serve index.html for the main scraper page

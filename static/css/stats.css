@@ -53,7 +53,8 @@
     width: 100%;
 }
 
-.unacquired-figures .section-header {
+.unacquired-figures .section-header,
+.preordered-figures .section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -72,17 +73,21 @@
     background-color: #e0e0e0;
 }
 
-#unacquired-list.hidden {
+#unacquired-list.hidden,
+#preordered-list.hidden {
     display: none;
 }
 
-#unacquired-table {
+#unacquired-table,
+#preordered-table {
     width: 100%;
     border-collapse: collapse;
 }
 
 #unacquired-table th, 
-#unacquired-table td {
+#unacquired-table td,
+#preordered-table th, 
+#preordered-table td {
     border: 1px solid #e0e0e0;
     padding: 10px;
     text-align: left;
@@ -112,24 +117,20 @@
     display: block;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .stats-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .stats-values {
-        grid-template-columns: 1fr;
-    }
-}
-
-#unacquired-table th {
-    position: relative;
+/* Make the cursor a pointer on the table headers */
+#unacquired-table th,
+#preordered-table th {
     cursor: pointer;
-    user-select: none;
 }
 
-#unacquired-table th:hover {
+/* Add transition for hover effect */
+#unacquired-table th,
+#preordered-table th {
+    transition: background-color 0.2s;
+}
+
+#unacquired-table th:hover,
+#preordered-table th:hover {
     background-color: #f5f5f5;
 }
 
@@ -142,12 +143,74 @@
     background-color: #f0f0f0;
 }
 
-/* Make the cursor a pointer on the table headers */
-#unacquired-table th {
+/* 编辑日期按钮样式 */
+.edit-date-btn {
+    background: transparent;
+    border: none;
+    color: #3498db;
     cursor: pointer;
+    margin-left: 8px;
+    padding: 2px 5px;
+    border-radius: 3px;
+    transition: background-color 0.2s;
 }
 
-/* Add transition for hover effect */
-#unacquired-table th {
-    transition: background-color 0.2s;
+.edit-date-btn:hover {
+    background-color: #f1f1f1;
+}
+
+/* 详情链接按钮样式 */
+.link-btn {
+    display: inline-flex;
+    align-items: center;
+    background-color: #f8f9fa;
+    color: #2c3e50;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.link-btn i {
+    margin-right: 5px;
+}
+
+.link-btn:hover {
+    background-color: #e9ecef;
+    color: #0056b3;
+}
+
+/* 日期和编辑按钮容器 */
+.release-date {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-values {
+        grid-template-columns: 1fr;
+    }
+    
+    #unacquired-table,
+    #preordered-table {
+        font-size: 0.9rem;
+    }
+    
+    #unacquired-table th, 
+    #unacquired-table td,
+    #preordered-table th, 
+    #preordered-table td {
+        padding: 8px 5px;
+    }
+    
+    .link-btn {
+        padding: 4px 8px;
+        font-size: 0.8rem;
+    }
 }
